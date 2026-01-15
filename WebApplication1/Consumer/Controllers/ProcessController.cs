@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Shared;
 using Shared.Contracts;
 using Shared.Grpc;
 using System.Diagnostics;
@@ -21,6 +23,13 @@ public class ProcessController : ControllerBase
         _factory = factory;
         _grpc = grpc;
         _logger = logger;
+    }
+
+    [HttpGet("token")]
+    [AllowAnonymous]
+    public string GetToken()
+    {
+        return JwtHelper.Generate();
     }
 
     [HttpGet("rest")]

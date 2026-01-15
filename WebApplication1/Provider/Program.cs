@@ -23,4 +23,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapGrpcService<GrpcCalculatorService>();
 
-app.Run();
+app.Run("http://localhost:5001");
+
