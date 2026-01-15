@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  provider:
+    build: ./provider
+    deploy:
+      replicas: 2
+
+  consumer:
+    build: ./consumer
+    deploy:
+      replicas: 2
+    depends_on:
+      - provider
+
+  gateway:
+    build: ./gateway
+    ports:
+      - "8080:80"
+    depends_on:
+      - consumer
