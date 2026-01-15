@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
-using Shared.Grpc;
 using System.Diagnostics;
 
 namespace Provider.Controllers;
