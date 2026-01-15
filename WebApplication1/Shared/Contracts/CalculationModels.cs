@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Shared.Contracts;
 
-namespace Shared.Contracts
+public class CalculationRequest
 {
-    internal class CalculationModels
-    {
-    }
+    public int A { get; set; }
+    public int B { get; set; }
+}
+
+public class CalculationResponse
+{
+    public int Result { get; set; }
+    public long ExecutionTimeMs { get; set; }
 }

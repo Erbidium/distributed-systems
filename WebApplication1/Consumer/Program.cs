@@ -1,3 +1,5 @@
+using Shared;
+using Shared.Grpc;
 using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);

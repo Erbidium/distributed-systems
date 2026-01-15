@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shared.Grpc";
+
+package calculator;
+
+service Calculator {
+  rpc Calculate (CalcRequest) returns (CalcReply);
+}
+
+message CalcRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message CalcReply {
+  int32 result = 1;
+  int64 executionTimeMs = 2;
+}
