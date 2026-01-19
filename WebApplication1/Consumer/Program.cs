@@ -7,18 +7,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddHttpClient("provider", c =>
 {
-    c.BaseAddress = new Uri("http://provider");
+    c.BaseAddress = new Uri("http://provider:8080");
     c.DefaultRequestHeaders.Authorization =
         new AuthenticationHeaderValue("Bearer", JwtHelper.Generate());
 });
 
 builder.Services.AddGrpcClient<Calculator.CalculatorClient>(o =>
 {
-    o.Address = new Uri("http://provider");
+    o.Address = new Uri("http://provider:8080");
 });
 
 builder.Logging.AddConsole();
 
 var app = builder.Build();
 app.MapControllers();
-app.Run("http://localhost:5002");
+app.Run();

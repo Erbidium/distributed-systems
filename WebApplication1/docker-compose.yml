@@ -1,0 +1,38 @@
+services:
+  provider:
+    build:
+      context: .
+      dockerfile: ./Provider/Dockerfile
+    container_name: provider
+    ports:
+      - "5001:8080"
+    networks:
+      - labnet
+
+  consumer:
+    build:
+      context: .
+      dockerfile: ./Consumer/Dockerfile
+    container_name: consumer
+    depends_on:
+      - provider
+    ports:
+      - "5002:8080"
+    networks:
+      - labnet
+
+  gateway:
+    build:
+      context: .
+      dockerfile: ./Gateway.Api/Dockerfile
+    container_name: gateway
+    depends_on:
+      - consumer
+    ports:
+      - "5000:8080"
+    networks:
+      - labnet
+
+networks:
+  labnet:
+    driver: bridge
