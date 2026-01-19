@@ -12,9 +12,11 @@ builder.Services.AddHttpClient("provider", c =>
         new AuthenticationHeaderValue("Bearer", JwtHelper.Generate());
 });
 
+AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
 builder.Services.AddGrpcClient<Calculator.CalculatorClient>(o =>
 {
-    o.Address = new Uri("http://provider:8080");
+    o.Address = new Uri("http://provider:8081");
 });
 
 builder.Logging.AddConsole();

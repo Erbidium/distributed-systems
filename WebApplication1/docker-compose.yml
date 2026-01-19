@@ -6,6 +6,7 @@ services:
     container_name: provider
     ports:
       - "5001:8080"
+      - "5003:8081"
     networks:
       - labnet
 
