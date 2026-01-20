@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Provider.API.Services;
 using Provider.Services;
 using Shared;
 
@@ -12,7 +13,11 @@ builder.Services.AddAuthentication("Bearer")
         opt.RequireHttpsMetadata = false;
         opt.TokenValidationParameters = JwtHelper.Parameters;
     });
-
+builder.Services.Configure<HostOptions>(o =>
+{
+    o.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
+});
+builder.Services.AddHostedService<CalculationWorker>();
 builder.Services.AddAuthorization();
 builder.Logging.AddConsole();
 
