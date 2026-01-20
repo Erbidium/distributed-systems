@@ -71,6 +71,33 @@ public sealed class CalculationWorker(ILogger<CalculationWorker> logger) : Backg
                 message.RequestId,
                 sw.ElapsedMilliseconds);
 
+            await _channel.QueueDeclareAsync(
+                queue: "calculation_results",
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null,
+                cancellationToken: stoppingToken);
+
+            var resultMsg = new CalculationResultMessage
+            {
+                RequestId = message.RequestId,
+                Result = result
+            };
+
+            var body = JsonSerializer.SerializeToUtf8Bytes(resultMsg);
+
+            await _channel.BasicPublishAsync(
+                exchange: "",
+                routingKey: "calculation_results",
+                mandatory: false,
+                basicProperties: new BasicProperties
+                {
+                    DeliveryMode = DeliveryModes.Persistent
+                },
+                body: body,
+                cancellationToken: stoppingToken);
+
             await _channel.BasicAckAsync(
                 args.DeliveryTag,
                 multiple: false,
