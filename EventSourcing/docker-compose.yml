@@ -1,0 +1,50 @@
+services:
+  nats:
+    image: nats:2.10
+    command: ["-js", "-m", "8222"]
+    ports:
+      - "4222:4222"   # client
+      - "8222:8222"   # monitoring
+
+  cassandra:
+    image: cassandra:4.1
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=lab-cluster
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe keyspaces' localhost 9042"]
+      interval: 20s
+      timeout: 10s
+      retries: 20
+
+  commands:
+    build:
+      context: .
+      dockerfile: Orders.Commands/Dockerfile
+    environment:
+      - NATS_URL=nats://nats:4222
+      - NATS_STREAM=ORDERS
+      - NATS_SUBJECT=orders.events
+    depends_on:
+      - nats
+    ports:
+      - "5001:8080"
+
+  materializer:
+    build:
+      context: .
+      dockerfile: Orders.Materializer/Dockerfile
+    environment:
+      - NATS_URL=nats://nats:4222
+      - NATS_STREAM=ORDERS
+      - NATS_SUBJECT=orders.events
+      - NATS_DURABLE=orders-materializer
+      - CASSANDRA_HOST=cassandra
+      - CASSANDRA__Port=9042
+      - CASSANDRA_KEYSPACE=lab
+    depends_on:
+      cassandra:
+        condition: service_healthy
+      nats:
+        condition: service_started

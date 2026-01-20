@@ -1,0 +1,6 @@
+@Orders.Commands_HostAddress = http://localhost:5186
+
+GET {{Orders.Commands_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

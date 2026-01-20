@@ -1,0 +1,6 @@
+@Orders.Materializer_HostAddress = http://localhost:5018
+
+GET {{Orders.Materializer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
